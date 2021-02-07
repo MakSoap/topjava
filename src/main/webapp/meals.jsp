@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html lang="ru">
 <style>
     table, th, td {
@@ -14,6 +14,7 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h2>Meals</h2>
+<a href="${pageContext.request.contextPath}/meals/add">Add meal</a>
 <table>
     <thead>
         <tr>
@@ -25,16 +26,16 @@
     </thead>
     <tbody>
     <c:forEach var="meal" items="${meals}" >
-        <c:set var="color" value="${meal.isExcess() ? '#FF0000' : '#008000'}"/>
-        <tr style="color: ${color}">
+        <tr style="color: ${meal.isExcess() ? '#FF0000' : '#008000'}">
             <td>
                 <fmt:parseDate value="${meal.getDateTime()}" pattern="yyyy-MM-dd'T'HH:mm" var="rawDate" type="date"/>
-                <fmt:formatDate value="${rawDate}" var="parsedDate" type="both" dateStyle="medium" timeStyle="short"/>
-                <c:out value="${parsedDate}"/>
+                <fmt:formatDate value="${rawDate}" pattern="yyyy-MM-dd HH:mm" var="parsedDate" type="both" dateStyle="medium" timeStyle="short"/>
+                ${parsedDate}
             </td>
-            <td><c:out value="${meal.getDescription()}"/></td>
-            <td><c:out value="${meal.getCalories()}"/></td>
-
+            <td>${meal.getDescription()}</td>
+            <td>${meal.getCalories()}</td>
+            <td><a href="${pageContext.request.contextPath}/meals/edit?mealId=${meal.getId()}">Edit meal</a></td>
+            <td><a href="${pageContext.request.contextPath}/meals/delete?mealId=${meal.getId()}">Delete meal</a></td>
         </tr>
     </c:forEach>
     </tbody>

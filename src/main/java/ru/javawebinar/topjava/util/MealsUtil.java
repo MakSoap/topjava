@@ -40,6 +40,7 @@ public class MealsUtil {
             if (TimeUtil.isBetweenHalfOpen(mealTime, startTime, endTime)) {
                 filteredUserMealList.add(
                         new MealTo(
+                                meal.getId(),
                                 meal.getDateTime(),
                                 meal.getDescription(),
                                 meal.getCalories(),
@@ -62,6 +63,7 @@ public class MealsUtil {
         return meals.stream()
                 .filter(meal -> TimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime))
                 .map(meal -> new MealTo(
+                        meal.getId(),
                         meal.getDateTime(),
                         meal.getDescription(),
                         meal.getCalories(),
