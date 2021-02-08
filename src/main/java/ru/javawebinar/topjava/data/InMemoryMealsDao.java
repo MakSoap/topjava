@@ -14,8 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-public enum InMemoryMealsDao implements MealsDao {
-    INSTANCE;
+public class InMemoryMealsDao implements MealsDao {
     private static final Logger log = getLogger(InMemoryMealsDao.class);
     private final Map<Integer, Meal> mealsStorage = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(1);

@@ -23,7 +23,7 @@ public class MealsServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        mealsDao = InMemoryMealsDao.INSTANCE;
+        mealsDao = new InMemoryMealsDao();
     }
 
     @Override
