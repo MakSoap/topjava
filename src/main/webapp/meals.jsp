@@ -14,7 +14,7 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h2>Meals</h2>
-<a href="${pageContext.request.contextPath}/meals/add">Add meal</a>
+<a href="${pageContext.request.contextPath}/meals?method=add">Add meal</a>
 <table>
     <thead>
         <tr>
@@ -34,8 +34,8 @@
             </td>
             <td>${meal.getDescription()}</td>
             <td>${meal.getCalories()}</td>
-            <td><a href="${pageContext.request.contextPath}/meals/edit?mealId=${meal.getId()}">Edit meal</a></td>
-            <td><a href="${pageContext.request.contextPath}/meals/delete?mealId=${meal.getId()}">Delete meal</a></td>
+            <td><a href="${pageContext.request.contextPath}/meals?method=edit&mealId=${meal.getId()}">Edit meal</a></td>
+            <td><a href="${pageContext.request.contextPath}/meals?method=delete&mealId=${meal.getId()}">Delete meal</a></td>
         </tr>
     </c:forEach>
     </tbody>

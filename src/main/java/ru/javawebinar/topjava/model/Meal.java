@@ -3,27 +3,32 @@ package ru.javawebinar.topjava.model;
 import java.time.LocalDateTime;
 
 public class Meal {
+    private int id;
+
     private final LocalDateTime dateTime;
 
     private final String description;
 
     private final int calories;
 
-    private int id;
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
+        this(0, dateTime, description,calories);
+    }
+
+    public Meal(Integer id, LocalDateTime dateTime, String description, int calories) {
+        this.id = id;
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
     }
 
-    public Meal(Integer id, LocalDateTime dateTime, String description, int calories) {
-        this(dateTime, description, calories);
-        this.id = id;
-    }
-
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public LocalDateTime getDateTime() {

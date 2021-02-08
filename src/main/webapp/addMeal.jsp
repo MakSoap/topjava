@@ -14,18 +14,15 @@
         <tbody>
         <tr>
             <td>DateTime:</td>
-            <fmt:parseDate value="${datetime}" pattern="yyyy-MM-dd'T'HH:mm" var="rawDate" type="date"/>
-            <fmt:formatDate value="${rawDate}" pattern="yyyy-MM-dd" var="parsedDate" type="both" dateStyle="medium" timeStyle="short"/>
-            <c:out value="${parsedDate}"/>
-            <td><input type="date" name="datetime" value="${parsedDate}"></td>
+            <td><input type="datetime-local" name="datetime" value="${meal.getDateTime()}"></td>
         </tr>
         <tr>
             <td>Description:</td>
-            <td><input type="text" name="description" value="${description}"></td>
+            <td><input type="text" name="description" value="${meal.getDescription()}"></td>
         </tr>
         <tr>
             <td>Calories:</td>
-            <td><input type="number" name="calories" value="${calories}"></td>
+            <td><input type="number" name="calories" value="${meal.getCalories()}"></td>
         </tr>
         </tbody>
     </table>

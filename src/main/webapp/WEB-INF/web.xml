@@ -24,32 +24,5 @@
         <servlet-name>mealsServlet</servlet-name>
         <url-pattern>/meals</url-pattern>
     </servlet-mapping>
-    <servlet>
-        <servlet-name>editMeal</servlet-name>
-        <servlet-class>ru.javawebinar.topjava.web.EditMeal</servlet-class>
-        <load-on-startup>0</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>editMeal</servlet-name>
-        <url-pattern>/meals/edit</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>deleteMeal</servlet-name>
-        <servlet-class>ru.javawebinar.topjava.web.DeleteMeal</servlet-class>
-        <load-on-startup>0</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>deleteMeal</servlet-name>
-        <url-pattern>/meals/delete</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>addMeal</servlet-name>
-        <servlet-class>ru.javawebinar.topjava.web.AddMeal</servlet-class>
-        <load-on-startup>0</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>addMeal</servlet-name>
-        <url-pattern>/meals/add</url-pattern>
-    </servlet-mapping>
 
 </web-app>
