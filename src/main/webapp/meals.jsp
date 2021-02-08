@@ -28,14 +28,14 @@
     <c:forEach var="meal" items="${meals}" >
         <tr style="color: ${meal.isExcess() ? '#FF0000' : '#008000'}">
             <td>
-                <fmt:parseDate value="${meal.getDateTime()}" pattern="yyyy-MM-dd'T'HH:mm" var="rawDate" type="date"/>
+                <fmt:parseDate value="${meal.dateTime}" pattern="yyyy-MM-dd'T'HH:mm" var="rawDate" type="date"/>
                 <fmt:formatDate value="${rawDate}" pattern="yyyy-MM-dd HH:mm" var="parsedDate" type="both" dateStyle="medium" timeStyle="short"/>
                 ${parsedDate}
             </td>
-            <td>${meal.getDescription()}</td>
-            <td>${meal.getCalories()}</td>
-            <td><a href="${pageContext.request.contextPath}/meals?method=edit&mealId=${meal.getId()}">Edit meal</a></td>
-            <td><a href="${pageContext.request.contextPath}/meals?method=delete&mealId=${meal.getId()}">Delete meal</a></td>
+            <td>${meal.description}</td>
+            <td>${meal.calories}</td>
+            <td><a href="${pageContext.request.contextPath}/meals?method=edit&mealId=${meal.id}">Edit meal</a></td>
+            <td><a href="${pageContext.request.contextPath}/meals?method=delete&mealId=${meal.id}">Delete meal</a></td>
         </tr>
     </c:forEach>
     </tbody>

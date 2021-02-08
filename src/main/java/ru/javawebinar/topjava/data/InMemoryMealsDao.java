@@ -3,7 +3,6 @@ package ru.javawebinar.topjava.data;
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
 
-import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
@@ -15,13 +14,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-public enum MealsDaoInStorage implements MealsDao {
+public enum InMemoryMealsDao implements MealsDao {
     INSTANCE;
-    private Map<Integer, Meal> mealsStorage = new ConcurrentHashMap<>();
-
-    private static final Logger log = getLogger(MealsDaoInStorage.class);
-
-    private AtomicInteger counter = new AtomicInteger(0);
+    private static final Logger log = getLogger(InMemoryMealsDao.class);
+    private final Map<Integer, Meal> mealsStorage = new ConcurrentHashMap<>();
+    private final AtomicInteger counter = new AtomicInteger(1);
 
     {
         Arrays
@@ -47,16 +44,28 @@ public enum MealsDaoInStorage implements MealsDao {
 
     @Override
     public Meal create(Meal meal) {
-        int id = counter.getAndIncrement();
-        meal.setId(id);
-        mealsStorage.put(meal.getId(), meal);
-        return meal;
+        if (meal.getId() == 0) {
+            int id = counter.getAndIncrement();
+            meal.setId(id);
+            mealsStorage.put(meal.getId(), meal);
+            log.debug("Meal was added by id [" + meal.getId() + "]");
+            return meal;
+        } else {
+            log.debug("Meal was not created!");
+            return null;
+        }
     }
 
     @Override
     public Meal update(Meal meal) {
-        mealsStorage.replace(meal.getId(), meal);
-        return meal;
+        Meal mealAfterUpdate = mealsStorage.replace(meal.getId(), meal);
+        if (mealAfterUpdate != null) {
+            log.debug("Meal was updated");
+            return meal;
+        } else {
+            log.debug("Meal was not updated");
+            return null;
+        }
     }
 
     @Override
