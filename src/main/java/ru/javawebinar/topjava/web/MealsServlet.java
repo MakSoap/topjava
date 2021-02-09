@@ -41,18 +41,14 @@ public class MealsServlet extends HttpServlet {
                     break;
                 case "edit":
                     log.debug("Open edit meal form");
-                    String rawMealId = request.getParameter("mealId");
-                    int mealId = Integer.parseInt(rawMealId);
-                    Meal meal = mealsDao.getById(mealId);
+                    Meal meal = mealsDao.getById(Integer.parseInt(request.getParameter("mealId")));
                     request.setAttribute("meal", meal);
                     request.getRequestDispatcher("/addMeal.jsp").forward(request, response);
                     break;
                 case "delete":
-                    rawMealId = request.getParameter("mealId");
-                    mealId = Integer.parseInt(rawMealId);
-                    log.debug("Delete meal by id [" + rawMealId + "] ...");
-                    boolean resultOfDelete = mealsDao.delete(mealId);
-                    log.debug("Meal [" + mealId + "] was " + (resultOfDelete ? "" : "not") + " removed");
+                    int mealId = Integer.parseInt(request.getParameter("mealId"));
+                    log.debug("Delete meal by id [" + mealId + "] ...");
+                    log.debug("Meal [" + mealId + "] was " + (mealsDao.delete(mealId) ? "" : "not") + " removed");
                     response.sendRedirect(request.getServletContext().getContextPath() + "/meals");
                     break;
                 default:
@@ -77,8 +73,7 @@ public class MealsServlet extends HttpServlet {
         String rawMealId = req.getParameter("mealId");
         if (rawMealId != null) {
             log.debug("Editing meal [" + rawMealId + "] ...");
-            int mealId = Integer.parseInt(rawMealId);
-            meal.setId(mealId);
+            meal.setId(Integer.parseInt(rawMealId));
             mealsDao.update(meal);
             log.debug("Meal update [" + meal.getId() + "]");
         } else {

@@ -44,13 +44,11 @@ public class InMemoryMealsDao implements MealsDao {
     @Override
     public Meal create(Meal meal) {
         if (meal.getId() == 0) {
-            int id = counter.getAndIncrement();
-            meal.setId(id);
-            mealsStorage.put(meal.getId(), meal);
-            log.debug("Meal was added by id [" + meal.getId() + "]");
+            meal.setId(counter.getAndIncrement());
+            Meal mealAfterCreate = mealsStorage.put(meal.getId(), meal);
+            log.debug(mealAfterCreate == null ? "Meal was added by id [" + meal.getId() + "]" : "Meal was not created!");
             return meal;
         } else {
-            log.debug("Meal was not created!");
             return null;
         }
     }
@@ -58,13 +56,8 @@ public class InMemoryMealsDao implements MealsDao {
     @Override
     public Meal update(Meal meal) {
         Meal mealAfterUpdate = mealsStorage.replace(meal.getId(), meal);
-        if (mealAfterUpdate != null) {
-            log.debug("Meal was updated");
-            return meal;
-        } else {
-            log.debug("Meal was not updated");
-            return null;
-        }
+        log.debug(mealAfterUpdate == null ? "Meal was updated" : "Meal was not updated");
+        return mealAfterUpdate;
     }
 
     @Override
