@@ -29,35 +29,30 @@ public class MealsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String method = request.getParameter("method");
-        if (method == null) {
-            log.debug("Open meals table");
-            request.setAttribute("meals", MealsUtil.filteredByStreams(mealsDao.getAll(), LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY));
-            request.getRequestDispatcher("meals.jsp").forward(request, response);
-        } else {
-            switch (method) {
-                case "add":
-                    log.debug("Open add meal form");
-                    request.getRequestDispatcher("/addMeal.jsp").forward(request, response);
-                    break;
-                case "edit":
-                    log.debug("Open edit meal form");
-                    Meal meal = mealsDao.getById(Integer.parseInt(request.getParameter("mealId")));
-                    request.setAttribute("meal", meal);
-                    request.getRequestDispatcher("/addMeal.jsp").forward(request, response);
-                    break;
-                case "delete":
-                    int mealId = Integer.parseInt(request.getParameter("mealId"));
-                    log.debug("Delete meal by id [" + mealId + "] ...");
-                    log.debug("Meal [" + mealId + "] was " + (mealsDao.delete(mealId) ? "" : "not") + " removed");
-                    response.sendRedirect(request.getServletContext().getContextPath() + "/meals");
-                    break;
-                default:
-                    log.debug("Open meals table");
-                    request.setAttribute("meals", MealsUtil.filteredByStreams(mealsDao.getAll(), LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY));
-                    request.getRequestDispatcher("meals.jsp").forward(request, response);
-                    break;
-            }
+        switch (method == null ? "" : method) {
+            case "add":
+                log.debug("Open add meal form");
+                request.getRequestDispatcher("/addMeal.jsp").forward(request, response);
+                break;
+            case "edit":
+                log.debug("Open edit meal form");
+                Meal meal = mealsDao.getById(Integer.parseInt(request.getParameter("mealId")));
+                request.setAttribute("meal", meal);
+                request.getRequestDispatcher("/addMeal.jsp").forward(request, response);
+                break;
+            case "delete":
+                int mealId = Integer.parseInt(request.getParameter("mealId"));
+                log.debug("Delete meal by id [" + mealId + "] ...");
+                log.debug("Meal [" + mealId + "] was " + (mealsDao.delete(mealId) ? "" : "not") + " removed");
+                response.sendRedirect(request.getServletContext().getContextPath() + "/meals");
+                break;
+            default:
+                log.debug("Open meals table");
+                request.setAttribute("meals", MealsUtil.filteredByStreams(mealsDao.getAll(), LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY));
+                request.getRequestDispatcher("meals.jsp").forward(request, response);
+                break;
         }
+
     }
 
     @Override
