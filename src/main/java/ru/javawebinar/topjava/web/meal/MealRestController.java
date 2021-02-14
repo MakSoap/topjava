@@ -37,31 +37,25 @@ public class MealRestController {
                 service.getAllByFilter(
                         SecurityUtil.authUserId(),
                         meal ->
-                                DateTimeUtil.isBetweenHalfOpen(meal.getDate(), startDate, endDate) &&
+                                DateTimeUtil.isInterval(meal.getDate(), startDate, endDate) &&
                                         DateTimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime)
                 ),
                 SecurityUtil.authUserCaloriesPerDay()
         );
     }
 
-    public MealTo get(int id) {
+    public Meal get(int id) {
         log.info("Get by id {}", id);
-        return MealsUtil.getTos(
-                Collections.singleton(service.get(id, SecurityUtil.authUserId())),
-                SecurityUtil.authUserCaloriesPerDay()
-        ).get(0);
+        return service.get(id, SecurityUtil.authUserId());
     }
     public void delete(int id) {
         log.info("Delete {}", id);
         service.delete(id, SecurityUtil.authUserId());
     }
-    public MealTo create(Meal meal) {
+    public Meal create(Meal meal) {
         log.info("Create {}", meal);
         ValidationUtil.checkNew(meal);
-        return MealsUtil.getTos(
-                Collections.singleton(service.create(meal, SecurityUtil.authUserId())),
-                SecurityUtil.authUserCaloriesPerDay()
-        ).get(0);
+        return service.create(meal, SecurityUtil.authUserId());
     }
     public void update(Meal meal, int id) {
         log.info("Update {}", meal);

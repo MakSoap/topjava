@@ -22,7 +22,7 @@ public class SpringMain {
 
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
 
-            System.out.println(mealRestController.getAllByFilter(LocalDate.of(2020, Month.JANUARY, 31), LocalTime.MIN, LocalDate.MAX, LocalTime.MAX));
+            System.out.println(mealRestController.getAllByFilter(LocalDate.of(2020, Month.JANUARY, 31), LocalTime.MIN, LocalDate.of(2020, Month.JANUARY, 31), LocalTime.MAX));
         }
     }
 }

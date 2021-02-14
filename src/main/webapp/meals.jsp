@@ -23,6 +23,18 @@
     <h2>Meals</h2>
     <a href="meals?action=create">Add Meal</a>
     <br><br>
+    <form id="filter">
+        <label for="startDate">От даты (включая)</label>
+        <input type="date" id="startDate" name="startDate" value="${param.startDate}">
+        <label for="endDate">До даты (включая)</label>
+        <input type="date" id="endDate" name="endDate" value="${param.endDate}">
+        <label for="startTime">От времени (включая)</label>
+        <input type="time" id="startTime" name="startTime" value="${param.startTime}">
+        <label for="endTime">До времени (исключая)</label>
+        <input type="time" id="endTime" name="endTime" value="${param.endTime}">
+        <button type="reset">Cancel</button>
+        <button type="submit">Filter</button>
+    </form>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>
@@ -38,7 +50,7 @@
             <tr class="${meal.excess ? 'excess' : 'normal'}">
                 <td>
                         <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
-                        <%--<%=TimeUtil.toString(meal.getDateTime())%>--%>
+<%--                        <%=TimeUtil.toString(meal.getDateTime())%>--%>
                         <%--${fn:replace(meal.dateTime, 'T', ' ')}--%>
                         ${fn:formatDateTime(meal.dateTime)}
                 </td>

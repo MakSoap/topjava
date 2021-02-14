@@ -61,8 +61,11 @@ public class InMemoryMealRepository implements MealRepository {
     }
     @Override
     public Collection<Meal> getAllByFilter(int userId, Predicate<Meal> filter) {
-        return usersMealRepository
-                .get(userId)
+        List<Integer> mealIdsForUser = usersMealRepository
+                .get(userId);
+        if (mealIdsForUser == null) {
+            return Collections.emptyList();
+        } else return mealIdsForUser
                 .stream()
                 .map( mealId -> get(mealId, userId))
                 .filter(Objects::nonNull)
