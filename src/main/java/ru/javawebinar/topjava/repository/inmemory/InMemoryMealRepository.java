@@ -16,9 +16,7 @@ import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryMealRepository implements MealRepository {
-    private final Map<Integer, Meal> mealsRepository = new ConcurrentHashMap<>();
     private final Map<Integer, Map<Integer, Meal>> mealsRepository2 = new ConcurrentHashMap<>();
-    private final Map<Integer, List<Integer>> usersMealRepository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
