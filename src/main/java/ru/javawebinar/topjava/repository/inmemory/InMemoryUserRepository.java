@@ -18,7 +18,6 @@ public class InMemoryUserRepository implements UserRepository {
     private final Map<Integer, User> repository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
 
-
     @Override
     public boolean delete(int id) {
         log.info("delete {}", id);
@@ -53,8 +52,7 @@ public class InMemoryUserRepository implements UserRepository {
         return repository
                 .values()
                 .stream()
-                .filter(user -> user.getEmail().equals(email))
-                .sorted()
+                .filter(user -> user.getEmail().equalsIgnoreCase(email))
                 .findFirst()
                 .orElse(null);
     }

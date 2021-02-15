@@ -3,9 +3,11 @@ package ru.javawebinar.topjava.repository.inmemory;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.web.SecurityUtil;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -15,61 +17,63 @@ import java.util.stream.Collectors;
 @Repository
 public class InMemoryMealRepository implements MealRepository {
     private final Map<Integer, Meal> mealsRepository = new ConcurrentHashMap<>();
+    private final Map<Integer, Map<Integer, Meal>> mealsRepository2 = new ConcurrentHashMap<>();
     private final Map<Integer, List<Integer>> usersMealRepository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.meals.forEach(meal -> save(meal, SecurityUtil.authUserId()));
+        MealsUtil.meals.forEach(meal -> save(meal, 1));
+        MealsUtil.meals2.forEach(meal -> save(meal, 2));
     }
 
     @Override
     public Meal save(Meal meal, int userId) {
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
-            mealsRepository.put(meal.getId(), meal);
-            usersMealRepository.computeIfPresent(userId, (id, mealList) -> {
-                mealList.add(meal.getId());
-                return mealList;
-            });
-            usersMealRepository.computeIfAbsent(userId, (mealList) -> new ArrayList<Integer>() {{ add(meal.getId()); }});
+            mealsRepository2.put(meal.getId(), new ConcurrentHashMap<Integer, Meal>() {{ put(userId, meal); }});
             return meal;
         }
         // handle case: update, but not present in storage
-        if (!usersMealRepository.get(userId).contains(meal.getId()))
+        Map<Integer, Meal> map = mealsRepository2.computeIfPresent(meal.getId(), (id, userMeal) -> {
+            userMeal.computeIfPresent(userId, (uId, mealForUser) -> meal);
+            return userMeal;
+        });
+        if (map == null)
             return null;
-        return mealsRepository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
-
+        else
+            return map.getOrDefault(userId, null);
     }
 
     @Override
     public boolean delete(int id, int userId) {
-        if (!usersMealRepository.get(userId).contains(id))
-            return false;
-        return mealsRepository.remove(id) != null;
+        return mealsRepository2.remove(id) != null;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        if (!usersMealRepository.get(userId).contains(id))
-            return null;
-        return mealsRepository.get(id);
+        return mealsRepository2.get(id).getOrDefault(userId, null);
     }
 
     @Override
-    public Collection<Meal> getAll(int userId) {
+    public List<Meal> getAll(int userId) {
         return getAllByFilter(userId, meal -> true);
     }
+
     @Override
-    public Collection<Meal> getAllByFilter(int userId, Predicate<Meal> filter) {
-        List<Integer> mealIdsForUser = usersMealRepository
-                .get(userId);
-        if (mealIdsForUser == null) {
-            return Collections.emptyList();
-        } else return mealIdsForUser
+    public List<Meal> getAllByDateFilter(int userId, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+        return getAllByFilter(userId, meal ->
+                DateTimeUtil.isInterval(meal.getDate(), startDate, endDate) &&
+                        DateTimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime)
+        );
+    }
+
+    private List<Meal> getAllByFilter(int userId, Predicate<Meal> mealFilter) {
+        return mealsRepository2
+                .values()
                 .stream()
-                .map( mealId -> get(mealId, userId))
-                .filter(Objects::nonNull)
-                .filter(filter)
+                .filter(userMeal -> userMeal.containsKey(userId))
+                .map(userMeal -> userMeal.get(userId))
+                .filter(mealFilter)
                 .sorted((firstMeal, secondMeal) -> ~firstMeal.getDateTime().compareTo(secondMeal.getDateTime()))
                 .collect(Collectors.toList());
     }

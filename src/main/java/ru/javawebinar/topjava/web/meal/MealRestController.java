@@ -6,15 +6,13 @@ import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
-import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.ValidationUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 @Controller
 public class MealRestController {
@@ -26,19 +24,24 @@ public class MealRestController {
         this.service = service;
     }
 
-    public Collection<MealTo> getAll() {
+    public List<MealTo> getAll() {
         log.info("Get all");
         return MealsUtil.getTos(service.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay());
     }
 
-    public Collection<MealTo> getAllByFilter(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
+    public List<MealTo> getAllByFilter(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
         log.info("get all by filter");
+        startDate = startDate == null ? LocalDate.MIN : startDate;
+        endDate = endDate == null ? LocalDate.MAX : endDate;
+        startTime = startTime == null ? LocalTime.MIN : startTime;
+        endTime = endTime == null ? LocalTime.MAX : endTime;
         return MealsUtil.getTos(
                 service.getAllByFilter(
                         SecurityUtil.authUserId(),
-                        meal ->
-                                DateTimeUtil.isInterval(meal.getDate(), startDate, endDate) &&
-                                        DateTimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime)
+                        startDate,
+                        endDate,
+                        startTime,
+                        endTime
                 ),
                 SecurityUtil.authUserCaloriesPerDay()
         );
