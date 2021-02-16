@@ -5,7 +5,6 @@ import ru.javawebinar.topjava.model.Meal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.function.Predicate;
 
 public interface MealRepository {
     // null if updated meal do not belong to userId

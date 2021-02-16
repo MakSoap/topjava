@@ -3,12 +3,13 @@ package ru.javawebinar.topjava.repository.inmemory;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.RangeUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
@@ -60,8 +61,8 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public List<Meal> getAllByDateFilter(int userId, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
         return getAllByFilter(userId, meal ->
-                DateTimeUtil.isInterval(meal.getDate(), startDate, endDate) &&
-                        DateTimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime)
+                RangeUtil.isInterval(meal.getDate(), startDate, endDate) &&
+                        RangeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime)
         );
     }
 
