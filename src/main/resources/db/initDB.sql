@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS user_roles;
-DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS meals;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users
 (
@@ -28,7 +28,7 @@ CREATE TABLE meals
 (
 id              INTEGER      AUTO_INCREMENT  PRIMARY KEY,
 user_id         INTEGER                         NOT NULL,
-datetime        DATETIME                        NOT NULL,
+datetime        TIMESTAMP                       NOT NULL,
 description     VARCHAR(255)                    NOT NULL,
 calories        INTEGER                         NOT NULL,
 CONSTRAINT user_meals_unique_datetime_idx UNIQUE (user_id, datetime),
