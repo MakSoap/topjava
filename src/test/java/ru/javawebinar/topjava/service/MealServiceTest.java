@@ -89,6 +89,19 @@ public class MealServiceTest {
     }
 
     @Test
+    public void updateNotFound() {
+        Meal notFoundMeal = new Meal(MealTestData.userMealForGet);
+        notFoundMeal.setId(MealTestData.NOT_FOUND);
+        assertThrows(NotFoundException.class, () -> service.update(notFoundMeal, MealTestData.ADMIN_ID));
+    }
+
+    @Test
+    public void updateAlienMeal() {
+        Meal alienMeal = MealTestData.getUpdatedForUser();
+        assertThrows(NotFoundException.class, () -> service.update(alienMeal, MealTestData.ADMIN_ID));
+    }
+
+    @Test
     public void delete() {
         service.delete(MealTestData.userMealForDelete, MealTestData.USER_ID);
         assertThrows(NotFoundException.class, () -> service.get(MealTestData.userMealForDelete, MealTestData.USER_ID));
