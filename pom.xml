@@ -24,7 +24,6 @@
 
         <!--DB-->
         <postgresql.version>42.2.18</postgresql.version>
-        <mysql.version>8.0.17</mysql.version>
         <!--    Tests  -->
         <junit.version>4.13.2</junit.version>
         <assertj.version>3.19.0</assertj.version>
@@ -90,15 +89,10 @@
         </dependency>
 
         <!--DataBase-->
-<!--        <dependency>-->
-<!--            <groupId>org.postgresql</groupId>-->
-<!--            <artifactId>postgresql</artifactId>-->
-<!--            <version>${postgresql.version}</version>-->
-<!--        </dependency>-->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.version}</version>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
         </dependency>
 
         <!--Web-->
