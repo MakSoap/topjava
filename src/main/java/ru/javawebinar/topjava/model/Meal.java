@@ -34,10 +34,6 @@ public class Meal extends AbstractBaseEntity {
         return calories;
     }
 
-    public boolean isNew() {
-        return id == null;
-    }
-
     public LocalDate getDate() {
         return dateTime.toLocalDate();
     }
