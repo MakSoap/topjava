@@ -25,7 +25,7 @@ public class MealTestData {
     public static final Meal adminMeal100008 = new Meal(START_SEQ + 9, LocalDateTime.of(2015, Month.JUNE, 1, 14, 0), "Админ ланч", 510);
     public static final Meal adminMeal100009 = new Meal(START_SEQ + 10, LocalDateTime.of(2015, Month.JUNE, 1, 21, 0), "Админ ужин", 1500);
 
-    public static final LocalDate betweenInclusive = userMeal100001.getDate();
+    public static final LocalDate BETWEEN_INCLUSIVE = userMeal100001.getDate();
 
     public static final Meal newMeal = new Meal(null, LocalDateTime.of(2020, Month.JANUARY, 31, 15, 0), "Ужин", 410);
     public static final Meal duplicateDateTimeUserMeal = new Meal(null, userMeal100007.getDateTime(), "Ужин2", 500);
