@@ -1,19 +1,18 @@
 package ru.javawebinar.topjava.model;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @NamedQueries({
         @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id = ?1 AND m.user.id = ?2"),
-//        @NamedQuery(name = Meal.CREATE, query = "INSERT INTO Meal "),
         @NamedQuery(name = Meal.UPDATE, query = "UPDATE Meal m set m.description = ?1, m.calories = ?2, m.dateTime = ?3 WHERE m.id = ?4 and m.user.id = ?5"),
-        @NamedQuery(name = Meal.GET, query = "SELECT m FROM Meal m WHERE m.id = ?1 AND m.user.id = ?2"),
         @NamedQuery(name = Meal.ALL, query = "SELECT m FROM Meal m WHERE m.user.id = ?1 ORDER BY m.dateTime DESC"),
         @NamedQuery(name = Meal.ALL_FILTERED, query = "SELECT m FROM Meal m WHERE m.user.id = ?1 AND m.dateTime >= ?2 AND m.dateTime < ?3 ORDER BY m.dateTime DESC"),
 })
@@ -22,9 +21,7 @@ import java.time.LocalTime;
 public class Meal extends AbstractBaseEntity {
 
     public static final String DELETE = "Meal.delete";
-    public static final String CREATE = "Meal.create";
     public static final String UPDATE = "Meal.update";
-    public static final String GET = "Meal.get";
     public static final String ALL = "Meal.all";
     public static final String ALL_FILTERED = "Meal.getAllFiltered";
 
@@ -33,16 +30,16 @@ public class Meal extends AbstractBaseEntity {
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
-    @NotNull
     @NotBlank
+    @Length(min = 2, max = 120)
     private String description;
 
     @Column(name = "calories", nullable = false)
-    @NotNull
     @Range(min = 10, max = 10000)
     private int calories;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne( fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     @NotNull
     private User user;
 

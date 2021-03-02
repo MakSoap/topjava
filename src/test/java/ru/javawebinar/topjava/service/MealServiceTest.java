@@ -17,8 +17,8 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
@@ -33,7 +33,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
-    private static final Map<String, Long> testExecutionTimeCollector = new ConcurrentHashMap<>();
+    private static final Map<String, Long> testExecutionTimeCollector = new HashMap<>();
 
     @ClassRule
     public static TestTimeCollectorRule testTimeCollectorRule = new TestTimeCollectorRule(testExecutionTimeCollector);
