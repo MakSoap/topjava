@@ -27,11 +27,29 @@ public class Profiles {
         }
     }
 
+    public static String getActiveRepositoryProfile() {
+        if (ClassUtils.isPresent("org.springframework.jdbc.core.JdbcTemplate", null)) {
+            return JDBC;
+        } else if (ClassUtils.isPresent("org.springframework.orm.jpa.JpaTransactionManager", null)) {
+            return JPA;
+        } else if (ClassUtils.isPresent("org.springframework.data.jpa.repository.JpaRepository", null)) {
+            return DATAJPA;
+        } else {
+            throw new IllegalStateException("Could not find repository impl");
+        }
+    }
+
     //http://stackoverflow.com/questions/23871255/spring-profiles-simple-example-of-activeprofilesresolver
     public static class ActiveDbProfileResolver implements ActiveProfilesResolver {
         @Override
         public @NonNull String[] resolve(@NonNull Class<?> aClass) {
             return new String[]{getActiveDbProfile()};
+        }
+    }
+    public static class ActiveRepositoryProfileResolver implements ActiveProfilesResolver {
+        @Override
+        public @NonNull String[] resolve(@NonNull Class<?> aClass) {
+            return new String[]{getActiveRepositoryProfile()};
         }
     }
 }
